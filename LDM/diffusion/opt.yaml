@@ -1,0 +1,65 @@
+path:
+    model_load_path: /root/lwd/SDM_program/
+    path_data_root: /root/autodl-tmp/STA_USA_precip/
+    model_save_path: /root/autodl-tmp/model_save/SDM/
+
+dataset:
+    sart_date: 2016
+    end_date: 2018
+
+vae:
+    num_variables: 1
+    num_hiddens: 256
+    num_residual_layers: 2
+    num_residual_hiddens: 48
+    embedding_dim: 4
+
+cUNet:
+    n_feat: 1024
+    in_channels: 385
+    out_channels: 4
+
+unet:
+    in_channel: 8
+    out_channel: 4
+    inner_channel: 256
+    channel_multiplier: [
+        1,
+        2,
+        4,
+        # 8
+    ]
+    attn_res: [
+        None
+    ]
+    res_blocks: 2
+    dropout: 0.1
+    norm_groups: 16
+
+beta_schedule:  # use munual beta_schedule for acceleration
+    train: 
+        schedule: linear
+        n_timestep: 1000
+        linear_start: 1.0e-6
+        linear_end: 1.0e-2
+    
+    val: 
+        schedule: linear
+        n_timestep: 1000
+        linear_start: 1.0e-6
+        linear_end: 1.0e-2
+
+diffusion: 
+    image_size: 48
+    channels: 4
+    conditional: False # unconditional generation or unconditional generation(super_resolution)
+    is_guide: True
+    guide_w: 0.5
+
+train: 
+    batch_size: 32
+    n_epoch: 1200
+    optimizer: 
+        type: adam
+        lr: 0.00001
+    
